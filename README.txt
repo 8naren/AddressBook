@@ -44,19 +44,7 @@ it will redirect into browser then you can see message displaying
 type the above url in browser then you see fastapi docs, then you can perform what ever you want
 
 
-
-
-
-
 After that select endpoint and you will find try option then you can try with your inputs.
-
-
-
-
-
-
-
-
 
 
 After Giving your Inputs you will find the Responses of that api below.

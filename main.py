@@ -27,6 +27,9 @@ def Add_address(data : address):
     """
     To add the Address into the database
     Arguments:
+            data : Basemodel
+    return:
+            dict : message Either added or not
 
     """
     database_data = session.query(Address).filter(data.lattitude == Address.lattitude and data.longitude == Address.longitude).first()
@@ -50,6 +53,15 @@ def Add_address(data : address):
 
 @app.get("/retrive/address")
 def Retrive_distrance(lattitude : float,longitude : float,distance : float):
+    """
+            Retrive the Addesses based on both lattitude and longitude
+            Arguments:
+                lattitude: a float
+                longitude: a float
+            Returns:
+                list : Addesses list if the distance is closer to any address in the database
+
+    """
     fetched_data = session.query(Address).all()
     addresses_list=[]
     for each in fetched_data:
@@ -69,6 +81,17 @@ def Retrive_distrance(lattitude : float,longitude : float,distance : float):
     
 @app.put("/update/address")
 def update_details(lattitude : float,longitude : float,updated_lattitude : float,updated_longitude : float):
+    """
+            Update both lattitude and longitude with new values
+            Arguments:
+                lattitude : a float
+                longitude : a float
+                updated_lattitude : a float
+                updated_longitude : a float
+
+            Returns:
+                dict : with message either deleted succesfully or not
+    """
     fetched_address = session.query(Address).filter(Address.lattitude == lattitude and Address.longitude == longitude).first()
     if fetched_address == None:
         return{
@@ -85,6 +108,14 @@ def update_details(lattitude : float,longitude : float,updated_lattitude : float
 
 @app.delete("/delete/address")
 def delete_address(lattitude : float,longitude : float):
+    """
+            To delete the Address in the database by using lattitude and longitude
+            Arguments:
+                lattitude : a float
+                longitude : a float
+            Returns:
+                dict : with message either deleted succesfully or not
+    """
     fetched_address = session.query(Address).filter(Address.lattitude == lattitude,Address.longitude == longitude).first()
     if fetched_address == None:
         return{

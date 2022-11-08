@@ -59,6 +59,16 @@ class Address(Base):
             return False
 
     def isValidPinCode(self,pincode):
+        """
+            Validates both lattitude and longitude
+            Arguments:
+                lattitude: a float
+                longitude: a float
+            Returns:
+                True : if Condition Satisfies
+                False : if Condition fails
+        """
+
         regex = "^[1-9]{1}[0-9]{2}\\s{0,1}[0-9]{3}$"
         p = re.compile(regex)
         if re.match(p,pincode):

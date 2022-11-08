@@ -41,7 +41,7 @@ def Add_address(data : address):
         }
 
 @app.get("/retrive/address")
-def Retrive_distrance(lattitude : float,longitude : float,distance:float):
+def Retrive_distrance(lattitude : float,longitude : float,distance : float):
     fetched_data = session.query(Address).all()
     addresses_list=[]
     for each in fetched_data:
@@ -51,30 +51,28 @@ def Retrive_distrance(lattitude : float,longitude : float,distance:float):
         c = 2 * atan2(sqrt(a), sqrt(1-a))
         d = R * c
         if d < distance:
-            addresses_list.append(each.__repr__())
+            addresses_list.append()
     if len(addresses_list)==0:
-            return {"di":d}
+            return {
+                "message":f"There is no Addresses near to this lattitudes {lattitude} and longitudes {longitude}"}
     return {
-        "near by addresses":addresses_list
+        "Near by Addresses":addresses_list
     }
     
-
-# @app.get('/data')
-# def get_alldata():
-#     f = session.query(Address).all()
-#     for i in f:
-#         print(i.lat,i.lon)
-
-
 @app.put("/update/address")
-def update_details(lattitude : float,longitude : float,update_address : address):
+def update_details(lattitude : float,longitude : float,updated_lattitude : float,updated_longitude : float):
     fetched_address = session.query(Address).filter(Address.lattitude == lattitude and Address.longitude == longitude).first()
     if fetched_address == None:
         return{
             "message":f"No address found with this lattitude {lattitude} and longitude {longitude}"
         }
     else:
-        pass
+        fetched_address.lattitude = updated_lattitude
+        fetched_address.longitude = updated_longitude
+        session.commit()
+        return{
+            "message":"Address updated successfully"
+        }
 
 
 @app.delete("/delete/address")
@@ -82,10 +80,20 @@ def delete_address(lattitude : float,longitude : float):
     fetched_address = session.query(Address).filter(Address.lattitude == lattitude,Address.longitude == longitude).first()
     if fetched_address == None:
         return{
-            "message":f"No address found with this lattitude {lattitude} and longitude {longitude}"
+            "message":f"No Address found with this lattitude {lattitude} and longitude {longitude}"
         }
     else:
-        pass
+        session.delete(fetched_address)
+        session.commit()
+        return{
+            "message": " Address deleted successfully"
+        }
+
+@app.get('/data')
+def get_alldata():
+    f = session.query(Address).all()
+    for i in f:
+        print(i.lattitude,i.longitude)
 
 
 

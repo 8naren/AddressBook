@@ -25,10 +25,7 @@ class Address(Base):
         else:
             return False
 
-    def __repr__(self):
-        return {"name":self.name,"pincode":self.pincode,"street":self.street_name,"lattitude":self.lattitude,"longitude":self.longitude}
 
-# "-90<=X<=+90 and -180<=Y<=180."
 
 # Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)

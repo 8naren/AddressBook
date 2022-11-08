@@ -15,16 +15,24 @@ class address(BaseModel):
 
 @app.get("/")
 def main():
+    """
+    First function to give message to find docs in fastapi
+    """
     return{
         "message":"http://127.0.0.1:8000/.docs"
     }
 
 @app.post("/add")
 def Add_address(data : address):
+    """
+    To add the Address into the database
+    Arguments:
+
+    """
     database_data = session.query(Address).filter(data.lattitude == Address.lattitude and data.longitude == Address.longitude).first()
     if database_data == None:
             address_to_add = Address(name = data.name,pincode = data.pincode,street_name = data.street_name,lattitude = data.lattitude,longitude = data.longitude)
-            if address_to_add.validate(lattitude = data.lattitude, longitude = data.longitude):
+            if address_to_add.Validate(lattitude = data.lattitude, longitude = data.longitude) and address_to_add.isValidPinCode(pincode=data.pincode):
                 session.add(address_to_add)
                 session.commit()
                 return{
@@ -51,10 +59,10 @@ def Retrive_distrance(lattitude : float,longitude : float,distance : float):
         c = 2 * atan2(sqrt(a), sqrt(1-a))
         d = R * c
         if d < distance:
-            addresses_list.append()
+            addresses_list.append({"name":each.name,"pincode":each.pincode,"street_name":each.street_name,"lattitude":each.lattitude,"longitude":each.longitude})
     if len(addresses_list)==0:
             return {
-                "message":f"There is no Addresses near to this lattitudes {lattitude} and longitudes {longitude}"}
+                "message":f"There is no Addresses near to this lattitudes {lattitude} {d} and longitudes {longitude}"}
     return {
         "Near by Addresses":addresses_list
     }
@@ -89,11 +97,7 @@ def delete_address(lattitude : float,longitude : float):
             "message": " Address deleted successfully"
         }
 
-@app.get('/data')
-def get_alldata():
-    f = session.query(Address).all()
-    for i in f:
-        print(i.lattitude,i.longitude)
+
 
 
 

@@ -40,22 +40,22 @@ def Add_address(data : address):
 
         }
 
-@app.get("/retrive/{lattitude}")
+@app.get("/retrive/address")
 def Retrive_distrance(lattitude : float,longitude : float,distance:float):
-    d = session.query(Address).all()
-    l=[]
-    for i in d:
-        dlat = i.lattitude-lattitude
-        dlon = i.longitude-longitude
-        a = (sin(dlat/2))**2 + cos(i.lattitude) * cos(lattitude) * (sin(dlon/2))**2
+    fetched_data = session.query(Address).all()
+    addresses_list=[]
+    for each in fetched_data:
+        dlat = each.lattitude-lattitude
+        dlon = each.longitude-longitude
+        a = (sin(dlat/2))**2 + cos(each.lattitude) * cos(lattitude) * (sin(dlon/2))**2
         c = 2 * atan2(sqrt(a), sqrt(1-a))
         d = R * c
         if d < distance:
-            l.append(i.__repr__())
-    if len(l)==0:
+            addresses_list.append(each.__repr__())
+    if len(addresses_list)==0:
             return {"di":d}
     return {
-        "near by addresses":l
+        "near by addresses":addresses_list
     }
     
 
@@ -66,13 +66,29 @@ def Retrive_distrance(lattitude : float,longitude : float,distance:float):
 #         print(i.lat,i.lon)
 
 
-# @app.put("/update{lat}{lon}")
-# def update_details(name:str,address:str):
-#     db_user = session.query(Details).filter(Details.Name==name).first()
-#     if db_user == None:
-#         return{
-#             "message":f"No details available with this username {name}"
-#         }
+@app.put("/update/address")
+def update_details(lattitude : float,longitude : float,update_address : address):
+    fetched_address = session.query(Address).filter(Address.lattitude == lattitude and Address.longitude == longitude).first()
+    if fetched_address == None:
+        return{
+            "message":f"No address found with this lattitude {lattitude} and longitude {longitude}"
+        }
+    else:
+        pass
+
+
+@app.delete("/delete/address")
+def delete_address(lattitude : float,longitude : float):
+    fetched_address = session.query(Address).filter(Address.lattitude == lattitude,Address.longitude == longitude).first()
+    if fetched_address == None:
+        return{
+            "message":f"No address found with this lattitude {lattitude} and longitude {longitude}"
+        }
+    else:
+        pass
+
+
+
 
 
 

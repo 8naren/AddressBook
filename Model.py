@@ -40,8 +40,8 @@ class Address(Base):
     name = Column(String(100))
     pincode = Column(Integer)
     street_name = Column(String(100))
-    lattitude = Column(Float)
-    longitude = Column(Float)
+    lattitude = Column(Float) # enter the lattitude in float value type
+    longitude = Column(Float) # Enter the longitude value in float  value type
 
     def Validate(self,lattitude,longitude):
         """
@@ -60,12 +60,12 @@ class Address(Base):
 
     def isValidPinCode(self,pincode):
         """
-            Validates both lattitude and longitude
+            Validates pincode
             Arguments:
-                lattitude: a float
-                longitude: a float
+                pincode : an integer
+                
             Returns:
-                True : if Condition Satisfies
+                True : if pincode matches with regex
                 False : if Condition fails
         """
 

@@ -130,6 +130,14 @@ def delete_address(lattitude : float,longitude : float):
 
 @app.get("/get/address")
 def get_address(lattitude : float,longitude : float):
+    """
+            To get  the Address in the database by using lattitude and longitude
+            Arguments:
+                lattitude : a float
+                longitude : a float
+            Returns:
+                dict : with required lattitude and longitude or message
+    """
     fetched_address = session.query(Address).filter(Address.lattitude == lattitude,Address.longitude == longitude).first()
     if fetched_address==None:
         return{

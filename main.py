@@ -35,7 +35,7 @@ def Add_address(data : address):
     database_data = session.query(Address).filter(data.lattitude == Address.lattitude and data.longitude == Address.longitude).first()
     if database_data == None:
             address_to_add = Address(name = data.name,pincode = data.pincode,street_name = data.street_name,lattitude = data.lattitude,longitude = data.longitude)
-            if address_to_add.Validate(lattitude = data.lattitude, longitude = data.longitude) and address_to_add.isValidPinCode(pincode=data.pincode):
+            if address_to_add.Validate(lattitude = data.lattitude, longitude = data.longitude) and address_to_add.isValidPinCode(pincode=str(data.pincode)):
                 session.add(address_to_add)
                 session.commit()
                 return{
@@ -43,7 +43,7 @@ def Add_address(data : address):
                 }
             else:
                 return{
-                    "message":"please check the address"
+                    "message":"please check the address pincode must be six digits and did not star with 0 and longitude and lattitude must be in float."
                 }
     else:
         return{
@@ -128,7 +128,17 @@ def delete_address(lattitude : float,longitude : float):
             "message": " Address deleted successfully"
         }
 
-
+@app.get("/get/address")
+def get_address(lattitude : float,longitude : float):
+    fetched_address = session.query(Address).filter(Address.lattitude == lattitude,Address.longitude == longitude).first()
+    if fetched_address==None:
+        return{
+            "message":f"Address with this lattitude {lattitude} and longitude{longitude} not found."
+        }
+    else:
+        return{
+            "address":fetched_address
+        }
 
 
 
